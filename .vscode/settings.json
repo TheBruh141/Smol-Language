@@ -1,0 +1,42 @@
+{
+    "files.autoSave": "onFocusChange",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "One Dark Pro Mix",
+    "window.zoomLevel": 2,
+    "[cpp]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "editor.minimap.enabled": false,
+    "[c]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "doxdocgen.c.firstLine": "/*",
+    "c-cpp-flylint.clang.pedantic": true,
+    "c-cpp-flylint.clang.pedanticErrors": true,
+    "c-cpp-flylint.clang.noExceptions": true,
+    "c-cpp-flylint.clang.blocks": false,
+    "c-cpp-flylint.cppcheck.force": true,
+    "c-cpp-flylint.cppcheck.inconclusive": true,
+    "c-cpp-flylint.cppcheck.suppressions": [
+        "cstyleCast",
+        "OSObjectCStyleCast",
+        "unusedStructMember", // cpp can not check for unused struct members in c correctly 
+    ],
+    "c-cpp-flylint.language": "c",
+    "c-cpp-flylint.standard": [
+        "c17", //
+    ],
+    "copyrightInserter.holder": "Smol Language",
+    "copyrightInserter.license": "gpl3",
+    "copyrightInserter.linePrefix": "COPYRIGHT | ",
+    "material-icon-theme.files.associations": {
+        "*.smol": ".vscode/icons/smol_icon",
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "files.insertFinalNewline": true,
+    "cSpell.words": [
+        "nessecarry"
+    ],
+}
