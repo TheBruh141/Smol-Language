@@ -2,6 +2,7 @@
 #define PARSER_H_
 
 #include "str.h"
+#include "tokenizer.h"
 #include <stdint.h>
 
 #define NO_CONTENT (void *)0xDED // defined as the garbage value
@@ -10,6 +11,8 @@
 
 #define EXHAUST_TOKEN(i)            (*(i)++)
 #define EXHAUST_TOKENS(i, how_many) (*(i) += (how_many))
+#define WITHOUT_SPACE               1
+#define WITH_SPACE                  0
 
 enum Parse_Token {
     ROOT = -1,
@@ -79,6 +82,11 @@ AST_node new_node(
     enum Parse_Token type, void *contents, struct AST_node *child,
     struct AST_node *next_sibling
 );
+
+void append_child(AST_node *parent, AST_node *child);
+void append_sibling(AST_node *parent, AST_node *sibling);
+
+
 // print routines
 void printMD_LIST(const MD_LIST *md_list);
 void printMD_CODE_LONG(const MD_CODE_LONG *md_code_long);
@@ -88,4 +96,17 @@ void printMD_TOK(const MD_TOK *md_tok);
 void printAST_node(const AST_node *ast_node);
 
 // parse routines
+
+// expect this token
+bool expect_token(
+    lexical_token const *source_tok, enum Lexical_Tokens token_type, LTA *array,
+    size_t index_of_source_tok, bool without_space
+);
+
+// is this token the first character in the line (except from tabs and spaces)
+bool is_first_in_line(lexical_token const *tok, str *contents);
+
+// get characters until it's breaker has been satisfied
+str walk_until(size_t pos_in_file, lexical_token const *breaker, str *contents);
+str walk_until_end_of_line(size_t pos_in_file, const char *contents);
 #endif // PARSER_H_

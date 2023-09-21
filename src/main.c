@@ -1,6 +1,7 @@
+#include "libs/common.h"
+#include "libs/parser.h"
 #include "libs/str.h"
 #include "libs/tokenizer.h"
-#include "libs/parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,20 +9,15 @@
 
 int main(void) {
 
-    LTA array = tokenize(
-        new_str("#, * , _, . , `, ; \n, > , -, / , [, ], : , =, {,}, \", ',  |")
-    );
-    print_lexical_token_array(&array);
-    free(array.items);
-    MD_CODE_LONG temp = {.contents = "asd", .language_name = "Smol"};
+    char *file_contents = read_file("/home/bruh-linux-arch/main/coding/"
+                                    "Smol_git/Smol-Language/tests/test.smol");
 
-    AST_node node = {
-        .child = NULL,
-        .type = MD_TOK_CODE_LONG,
-        .contents = &temp,
-        .next_sibling = NULL,
-    };
-    printAST_node(&node);
+    printf("%s\n", file_contents);
+
+    LTA array = tokenize(new_str(file_contents));
+    print_lexical_token_array(&array);
+    printf("done");
+    free(array.items);
 
     return 0;
 }

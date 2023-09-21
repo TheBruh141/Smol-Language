@@ -5,13 +5,15 @@
  * them more bulletproof.
  */
 
+#include "str.h"
 #include <stdlib.h>
-
 // prototypes
 
 void *sml_malloc(size_t size);
 void *sml_calloc(size_t new_mem, size_t size);
 void *sml_realloc(void *p, unsigned long new_mem);
+
+char *read_file(char *filename);
 
 // custom memory allocator
 void *sml_alloc(size_t new_mem, size_t size);

@@ -28,7 +28,7 @@ void *sml_calloc(size_t new_mem, size_t size) {
 }
 
 void *sml_realloc(void *p, unsigned long new_mem) {
-    void* new_ptr = realloc(p, new_mem);
+    void *new_ptr = realloc(p, new_mem);
 
     if (new_ptr == NULL && new_mem > 0) {
         throw_error(MEMORY_ALLOCATION_ERROR, "realloc failed", true);
@@ -47,4 +47,35 @@ void *sml_alloc(size_t new_mem, size_t size) {
     void *ret = sml_malloc(new_mem * size);
 #endif
     return ret;
+}
+
+char *read_file(char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return NULL;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char *buffer = (char *)malloc(file_size + 1);
+    if (buffer == NULL) {
+        perror("Memory allocation failed");
+        fclose(file);
+        return NULL;
+    }
+
+    size_t read_size = fread(buffer, 1, file_size, file);
+    if (read_size != (size_t)file_size) {
+        perror("Error reading file");
+        free(buffer);
+        fclose(file);
+        return NULL;
+    }
+
+    buffer[file_size] = '\0';
+    fclose(file);
+    return buffer;
 }

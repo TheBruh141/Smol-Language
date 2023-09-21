@@ -17,11 +17,13 @@ typedef struct {
 
 str new_str(char *contents);
 
-void double_str_capacity(str *str); 
+void double_str_capacity(str *str);
 
-void append_to_str(str* source, char *contents, size_t char_size);
+void append_to_str(str *source, char *contents, size_t char_size);
+
+char *get_portion_of_string(const char *input, int start, int length);
 
 #pragma endregion prototypes
-void debug_print_str(const str *s);
+void              debug_print_str(const str *s);
 
 #endif // STR_H_

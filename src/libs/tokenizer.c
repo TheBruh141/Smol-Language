@@ -1,5 +1,6 @@
 #include "tokenizer.h"
 #include "common.h"
+#include "errors.h"
 #include "str.h"
 
 #include <ctype.h>
@@ -23,13 +24,25 @@ lexical_token_array new_lexical_token_array(void) {
 }
 
 void double_lexical_token_capacity(lexical_token_array *arr) {
-    arr->capacity *= 2;
-    size_t size    = arr->capacity * sizeof(lexical_token);
-    arr->items     = (lexical_token *)realloc((void *)arr->items, size);
+    static int failed_state  = 0;
+    arr->capacity           *= 2;
+    size_t         size      = arr->capacity * sizeof(lexical_token);
+    lexical_token *temp      = arr->items;
+    temp = (lexical_token *)realloc((void *)arr->items, size);
+    if (NULL == temp) {
+        throw_error(MEMORY_ALLOCATION_ERROR, "cannot double array", false);
+        failed_state++;
+        if (failed_state > 5) {
+            throw_error(MEMORY_ALLOCATION_ERROR, "cannot double array", true);
+        }
+        double_lexical_token_capacity(arr);
+    } else {
+        arr->items = temp;
+    }
 }
 
 void append_lexical_token(lexical_token_array *arr, lexical_token *tok) {
-    if (arr->last_pos == arr->capacity) {
+    if (arr->last_pos + 1 == arr->capacity) {
         double_lexical_token_capacity(arr);
     }
     arr->items[arr->last_pos++] = *tok;

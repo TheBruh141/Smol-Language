@@ -2,7 +2,7 @@
 CC = gcc
 CFLAGS_COMMON = -Wall -Wextra -Isrc/libs -std=c2x -fsanitize=address,undefined,leak
 CFLAGS_RELEASE = -O3
-CFLAGS_DEBUG = -g -fsanitize=address,undefined,leak 
+CFLAGS_DEBUG = -g -fsanitize=address,undefined,leak -O0 
 
 # Directories
 SRC_DIR = src

@@ -1,1 +1,13 @@
 build/*
+build/debug/main.o
+build/debug/smolc_debug.out
+build/debug/libs/common.o
+build/debug/libs/parser.o
+build/debug/libs/str.o
+build/debug/libs/tokenizer.o
+build/release/main.o
+build/release/smolc_release.out
+build/release/libs/common.o
+build/release/libs/parser.o
+build/release/libs/str.o
+build/release/libs/tokenizer.o
