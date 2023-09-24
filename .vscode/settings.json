@@ -1,20 +1,24 @@
 {
     "files.autoSave": "onFocusChange",
     "workbench.iconTheme": "material-icon-theme",
-    "workbench.colorTheme": "One Dark Pro Mix",
-    "window.zoomLevel": 2,
+    "workbench.colorTheme": "Catppuccin Frappé",
+    "window.zoomLevel": 4,
     "[cpp]": {
-        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+        "editor.defaultFormatter": "xaver.clang-format"
     },
-    "editor.minimap.enabled": false,
     "[c]": {
         "editor.defaultFormatter": "xaver.clang-format"
     },
+    "c-cpp-flylint.flawfinder.enable": false,
+    "clang-format.language.c.enable": true,
+    "editor.minimap.enabled": false,
     "doxdocgen.c.firstLine": "/*",
+    "c-cpp-flylint.cppcheck.enable": true,
     "c-cpp-flylint.clang.pedantic": true,
     "c-cpp-flylint.clang.pedanticErrors": true,
     "c-cpp-flylint.clang.noExceptions": true,
     "c-cpp-flylint.clang.blocks": false,
+    "c-cpp-flylint.clang.configFile": ".clang-format",
     "c-cpp-flylint.cppcheck.force": true,
     "c-cpp-flylint.cppcheck.inconclusive": true,
     "c-cpp-flylint.cppcheck.suppressions": [
@@ -24,7 +28,7 @@
     ],
     "c-cpp-flylint.language": "c",
     "c-cpp-flylint.standard": [
-        "c17", //
+        "c11"
     ],
     "copyrightInserter.holder": "Smol Language",
     "copyrightInserter.license": "gpl3",

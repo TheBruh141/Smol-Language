@@ -1,0 +1,15 @@
+
+=================================================================
+==47998==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 33 byte(s) in 6 object(s) allocated from:
+    #0 0x7fe7064b4887 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145
+    #1 0x556d85ebdba3 in sml_malloc src/libs/common.c:11
+    #2 0x556d85ebdcd1 in sml_alloc src/libs/common.c:46
+    #3 0x556d85ec073e in get_portion_of_string src/libs/str.c:52
+    #4 0x556d85ebf64a in walk_until_end_of_line src/libs/parser.c:167
+    #5 0x556d85ebfb60 in parse src/libs/parser.c:193
+    #6 0x556d85ebda24 in main src/main.c:22
+    #7 0x7fe705829d8f in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+
+SUMMARY: AddressSanitizer: 33 byte(s) leaked in 6 allocation(s).

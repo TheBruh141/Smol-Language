@@ -7,17 +7,24 @@
 
 #define DEBUG 1
 
-int main(void) {
+int main (int argc, char** argv) {
 
-    char *file_contents = read_file("/home/bruh-linux-arch/main/coding/"
-                                    "Smol_git/Smol-Language/tests/test.smol");
+    printf ("argc = %d\n", argc);
 
-    printf("%s\n", file_contents);
+    if (argc != 2) {
+        fprintf (stderr, "Usage: %s <file>\n", argv[0]);
+        exit (1);
+    }
 
-    LTA array = tokenize(new_str(file_contents));
-    print_lexical_token_array(&array);
-    printf("done");
-    free(array.items);
+    str file_contents = new_str (read_file (argv[1]));
+    LTA array         = tokenize (file_contents);
+    print_lexical_token_array (&array);
+    AST_node AST = parse (&array, &file_contents);
+    // free_AST_tree (&AST);
+    // printf("done");
+    // free(array.items);
+    free (array.items);
+    free (file_contents.contents);
 
-    return 0;
+    // return 0;
 }

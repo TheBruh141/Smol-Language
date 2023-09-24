@@ -1,81 +1,75 @@
 #include "common.h"
 #include "errors.h"
+#include <limits.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void *sml_malloc(size_t size) {
 
-    void *void_pointer = malloc(size);
-    if (void_pointer == NULL) {
-        throw_error(
-            MEMORY_ALLOCATION_ERROR, "memory allocation failed in sml_malloc",
-            true
-        );
-    }
-    return void_pointer;
+  // write a secure malloc
+  void *new_mem = malloc(size);
+  if (new_mem == NULL) {
+    throw_error(MEMORY_ALLOCATION_ERROR, "failed to allocate memory", true);
+  }
+  return new_mem;
 }
 
 void *sml_calloc(size_t new_mem, size_t size) {
 
-    void *void_pointer = calloc(new_mem, size);
-    if (void_pointer == NULL) {
-        throw_error(
-            MEMORY_ALLOCATION_ERROR, "memory allocation failed in sml_calloc",
-            true
-        );
-    }
-    return void_pointer;
+  void *void_pointer = calloc(new_mem, size);
+  if (void_pointer == NULL) {
+    throw_error(MEMORY_ALLOCATION_ERROR,
+                "memory allocation failed in sml_calloc", true);
+  }
+  return void_pointer;
 }
 
 void *sml_realloc(void *p, unsigned long new_mem) {
-    void *new_ptr = realloc(p, new_mem);
+  void *new_ptr = realloc(p, new_mem);
 
-    if (new_ptr == NULL && new_mem > 0) {
-        throw_error(MEMORY_ALLOCATION_ERROR, "realloc failed", true);
-        exit(EXIT_FAILURE); // You can handle the error differently if needed
-    }
+  if (new_ptr == NULL ) {
+    throw_error(MEMORY_ALLOCATION_ERROR, "realloc failed", true);
+    exit(EXIT_FAILURE); // You can handle the error differently if needed
+  }
 
-    return new_ptr;
+  return new_ptr;
 }
 
 void *sml_alloc(size_t new_mem, size_t size) {
-#ifdef DEBUG
-    putchar('\n');
-    void *ret = sml_calloc(new_mem, size);
-#else
-    putchar('\n');
+  if (new_mem * size > LONG_MAX) {
+    throw_error(INTERNAL_ERROR,
+                "too big of a size of sml_alloc all sizes must be smaller "
+                "than size_t_max or LONG_MAX",
+                true);
+  } else {
     void *ret = sml_malloc(new_mem * size);
-#endif
     return ret;
+  }
+  return (void *)0xDEAD; 
 }
 
 char *read_file(char *filename) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        perror("Error opening file");
-        return NULL;
-    }
+  FILE *fp = fopen(filename, "r");
+  if (fp == NULL) {
+    throw_error(IO_ERROR, "File not found", true);
+    return NULL;
+  }
 
-    fseek(file, 0, SEEK_END);
-    long file_size = ftell(file);
-    fseek(file, 0, SEEK_SET);
+  fseek(fp, 0, SEEK_END);
+  size_t size = ftell(fp);
+  fseek(fp, 0, SEEK_SET);
 
-    char *buffer = (char *)malloc(file_size + 1);
-    if (buffer == NULL) {
-        perror("Memory allocation failed");
-        fclose(file);
-        return NULL;
-    }
+  char *buffer = calloc(size + 1, sizeof(char));
+  if (buffer == NULL) {
+    throw_error(IO_ERROR, "Memory allocation failed", true);
+    fclose(fp);  // Close the file before returning
+    return NULL;
+  }
 
-    size_t read_size = fread(buffer, 1, file_size, file);
-    if (read_size != (size_t)file_size) {
-        perror("Error reading file");
-        free(buffer);
-        fclose(file);
-        return NULL;
-    }
+  fread(buffer, sizeof(char), size, fp);
+  buffer[size] = '\0';
 
-    buffer[file_size] = '\0';
-    fclose(file);
-    return buffer;
+  fclose(fp);
+  return buffer;
 }

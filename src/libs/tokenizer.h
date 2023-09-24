@@ -6,8 +6,8 @@
 #include <stddef.h>
 
 enum Lexical_Tokens {
-
-    L_TOK_NUM = 1,
+    L_TOK_EOF            = 0,
+    L_TOK_NUM            = 1,
     L_TOK_NEWLINE        = '\n',
     L_TOK_HASH           = '#',
     L_TOK_STAR           = '*',
@@ -41,16 +41,16 @@ enum Lexical_Tokens {
 typedef struct {
 
     unsigned char type; // enum token Lexical Tokens
-    size_t        pos;
-    size_t        line;
-    size_t        column;
+    size_t pos;
+    size_t line;
+    size_t column;
 
 } lexical_token;
 
 typedef struct {
-    lexical_token *items;
-    size_t         capacity;
-    size_t         last_pos;
+    lexical_token* items;
+    size_t capacity;
+    size_t last_pos;
 } lexical_token_array;
 
 // prototypes
@@ -58,20 +58,19 @@ typedef struct {
 
 typedef lexical_token_array LTA;
 
-lexical_token
-new_lexical_token(unsigned char type, size_t pos, size_t line, size_t column);
+lexical_token new_lexical_token (unsigned char type, size_t pos, size_t line, size_t column);
 
-LTA  new_empty_lexical_token(void);
-void double_lexical_token_capacity(lexical_token_array *arr);
-void append_lexical_token(lexical_token_array *arr, lexical_token *tok);
+LTA new_empty_lexical_token (void);
+void double_lexical_token_capacity (lexical_token_array* arr);
+void append_lexical_token (lexical_token_array* arr, lexical_token* tok);
 
 // semantic routines
-int  is_token(const char t);
-lexical_token_array tokenize(str file_contents);
+int is_token (const char t);
+lexical_token_array tokenize (str file_contents);
 
 // printing routines
-void print_lexical_token(const lexical_token *token);
-void print_lexical_token_array(const lexical_token_array *array);
+void print_lexical_token (const lexical_token* token);
+void print_lexical_token_array (const lexical_token_array* array);
 
 
 #endif // TOKENIZER_H_

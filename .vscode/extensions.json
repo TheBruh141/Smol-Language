@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "jbenden.c-cpp-flylint"
+        "jbenden.c-cpp-flylint",
+        "xaver.clang-format"
     ]
 }

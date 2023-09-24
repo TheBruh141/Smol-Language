@@ -5,14 +5,13 @@
 #include "tokenizer.h"
 #include <stdint.h>
 
-#define NO_CONTENT (void *)0xDED // defined as the garbage value
-#define NOT_SET_YET                                                            \
-    (void *)0xDAD // defined as the garbage value for not set vars
+#define NO_CONTENT (void*)0  // defined as the garbage value
+#define NOT_SET_YET (void*)0 // defined as the garbage value for not set vars
 
-#define EXHAUST_TOKEN(i)            (*(i)++)
+#define EXHAUST_TOKEN(i) (*(i)++)
 #define EXHAUST_TOKENS(i, how_many) (*(i) += (how_many))
-#define WITHOUT_SPACE               1
-#define WITH_SPACE                  0
+#define WITHOUT_SPACE 1
+#define WITH_SPACE 0
 
 enum Parse_Token {
     ROOT = -1,
@@ -41,72 +40,51 @@ enum Parse_Token {
     MD_TOK_LINK,
     MD_TOK_IMAGE,
 
+    SML_VISUAL_START,
+    SML_VISUAL_END,
+    SML_SEMANTIC_START,
+    SML_SEMANTIC_END,
+    SML_ATTIBUTE_START,
+    SML_ATTRIBUTE_END,
     // !MARKDOWN
 };
 
-// if you have the time optimize this to use void*'s or generalize it or idk :p
 typedef struct {
-    char *contents;
-    int   number; // if number < 0, then LIST is unordered
-} MD_LIST;
+    char** contents;
+    uint32_t size;
+} contents_t;
 
-typedef struct {
-    char *contents;
-    char *language_name;
-} MD_CODE_LONG;
+struct Parse_State;
 
 typedef struct {
-    char *text;
-    char *link;
-} MD_LINK;
+    struct Parse_State** childs;
+    uint32_t child_count;
+} childs_t;
 
-typedef struct {
-    char *text;
-    char *link;
-} MD_IMAGE;
+typedef struct Parse_State {
+    struct Parse_State* parent;
+    childs_t childs;
+    struct Parse_State* next_sibling;
+    struct Parse_State* prev_sibling;
+    enum Parse_Token token;
+    uint32_t child_count;
+    uint16_t sibling_count;
+    uint16_t id;
+    uint32_t line;
+    uint32_t column;
+    uint32_t indent_level;
+    // contents
+    contents_t contents;
+} Parse_State;
 
-typedef struct {
-    char *text;
-} MD_TOK;
+// returns an empty contents structure
+contents_t new_contents ();
 
-typedef struct AST_node {
-    enum Parse_Token type;
-    void            *contents;
-    struct AST_node *child;
-    struct AST_node *next_sibling;
-} AST_node;
+// returns an empty parse structure
+Parse_State* parse_state_new (Parse_State* parent);
+void parse_state_free (Parse_State* state);
 
-// prototypes
+// parse the file
+Parse_State* parse_file (const char* filename);
 
-AST_node new_node(
-    enum Parse_Token type, void *contents, struct AST_node *child,
-    struct AST_node *next_sibling
-);
-
-void append_child(AST_node *parent, AST_node *child);
-void append_sibling(AST_node *parent, AST_node *sibling);
-
-
-// print routines
-void printMD_LIST(const MD_LIST *md_list);
-void printMD_CODE_LONG(const MD_CODE_LONG *md_code_long);
-void printMD_LINK(const MD_LINK *md_link);
-void printMD_IMAGE(const MD_IMAGE *md_image);
-void printMD_TOK(const MD_TOK *md_tok);
-void printAST_node(const AST_node *ast_node);
-
-// parse routines
-
-// expect this token
-bool expect_token(
-    lexical_token const *source_tok, enum Lexical_Tokens token_type, LTA *array,
-    size_t index_of_source_tok, bool without_space
-);
-
-// is this token the first character in the line (except from tabs and spaces)
-bool is_first_in_line(lexical_token const *tok, str *contents);
-
-// get characters until it's breaker has been satisfied
-str walk_until(size_t pos_in_file, lexical_token const *breaker, str *contents);
-str walk_until_end_of_line(size_t pos_in_file, const char *contents);
 #endif // PARSER_H_
