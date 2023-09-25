@@ -10,7 +10,7 @@
 #   Chromium A style complying with Chromium’s style guide
 #   Mozilla A style complying with Mozilla’s style guide
 #   WebKit A style complying with WebKit’s style guide
-#BasedOnStyle:
+BasedOnStyle: LLVM 
 
 # TabWidth (unsigned)
 # The number of columns used for tab stops.
@@ -70,7 +70,7 @@ AccessModifierOffset: 0
 #   BAS_AlwaysBreak (in configuration: AlwaysBreak) Always break after an open bracket, if the parameters don’t fit on a single line, e.g.:
 #   someLongFunction(
 #       argument1, argument2);
-AlignAfterOpenBracket: false
+AlignAfterOpenBracket: true
 
 # AlignConsecutiveAssignments (bool)
 # If true, aligns consecutive assignments.

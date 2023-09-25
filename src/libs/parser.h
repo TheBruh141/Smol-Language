@@ -49,42 +49,15 @@ enum Parse_Token {
     // !MARKDOWN
 };
 
-typedef struct {
-    char** contents;
-    uint32_t size;
-} contents_t;
+typedef struct AST_node {
+    enum Parse_Token type;
+    uint_fast64_t id;
+    str_array contents;
+    struct AST_node* parent;
+    struct AST_node* child;
+    struct AST_node* next_sibling;
+    struct AST_node* prev_sibling;
+} AST_node;
 
-struct Parse_State;
-
-typedef struct {
-    struct Parse_State** childs;
-    uint32_t child_count;
-} childs_t;
-
-typedef struct Parse_State {
-    struct Parse_State* parent;
-    childs_t childs;
-    struct Parse_State* next_sibling;
-    struct Parse_State* prev_sibling;
-    enum Parse_Token token;
-    uint32_t child_count;
-    uint16_t sibling_count;
-    uint16_t id;
-    uint32_t line;
-    uint32_t column;
-    uint32_t indent_level;
-    // contents
-    contents_t contents;
-} Parse_State;
-
-// returns an empty contents structure
-contents_t new_contents ();
-
-// returns an empty parse structure
-Parse_State* parse_state_new (Parse_State* parent);
-void parse_state_free (Parse_State* state);
-
-// parse the file
-Parse_State* parse_file (const char* filename);
-
+void free_all_AST (AST_node* root);
 #endif // PARSER_H_
